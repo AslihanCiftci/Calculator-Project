@@ -1,0 +1,69 @@
+actor calculator {
+  var cell: Int = 0;
+  var history: [Text] = [];  // Array to store the operation history
+
+  // Helper function to save operation history
+  private func saveHistory(operation: Text) {
+    history := history # [operation];
+  };
+
+  public func add(value: Int) : async Int {
+    cell += value;
+    saveHistory("Addition: " # Nat.toText(value) # " => Result: " # Int.toText(cell));
+    cell
+  };
+
+  public func subtract(value: Int) : async Int {
+    cell -= value;
+    saveHistory("Subtraction: " # Nat.toText(value) # " => Result: " # Int.toText(cell));
+    cell
+  };
+
+  public func multiply(value: Int) : async Int {
+    cell *= value;
+    saveHistory("Multiplication: " # Nat.toText(value) # " => Result: " # Int.toText(cell));
+    cell
+  };
+
+  public func divide(value: Int) : async ?Int {
+    if (value == 0) {
+      saveHistory("Division: " # Nat.toText(value) # " => Error: Division by zero");
+      null  // Division by zero error
+    } else {
+      cell /= value;
+      saveHistory("Division: " # Nat.toText(value) # " => Result: " # Int.toText(cell));
+      ?cell
+    }
+  };
+
+  public func modulus(value: Int) : async ?Int {
+    if (value == 0) {
+      saveHistory("Modulus: " # Nat.toText(value) # " => Error: Modulus by zero");
+      null  // Modulus by zero error
+    } else {
+      cell := cell % value;
+      saveHistory("Modulus: " # Nat.toText(value) # " => Result: " # Int.toText(cell));
+      ?cell
+    }
+  };
+
+  public func power(value: Int) : async Int {
+    cell := Int.pow(cell, value);
+    saveHistory("Power: " # Nat.toText(value) # " => Result: " # Int.toText(cell));
+    cell
+  };
+
+  public func clear() : async () {
+    cell := 0;
+    saveHistory("Clear operation performed. Cell reset.");
+  };
+
+  public func showHistory() : async [Text] {
+    history
+  };
+
+  public func clearHistory() : async () {
+    history := [];
+    saveHistory("History cleared.");
+  };
+}
